@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OutKid — The Smarter Way to Discover After-School Activities</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lime: #C8F135;
+    --pink: #F02D8A;
+    --pink-light: #FFD6EC;
+    --pink-dark: #C4006E;
+    --yellow: #FFE033;
+    --orange: #FF6B35;
+    --white: #FFFFFF;
+    --dark: #1A1A2E;
+    --text: #2D2D2D;
+    --text-muted: #666;
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--text);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 40px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid var(--lime);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .nav-logo-text {
+    font-family: 'Fredoka One', cursive;
+    font-size: 26px; color: var(--pink);
+    letter-spacing: 1px;
+  }
+  .nav-links { display: flex; align-items: center; gap: 24px; }
+  .nav-links a {
+    font-weight: 700; font-size: 15px;
+    color: var(--text); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--pink); }
+  .nav-cta {
+    background: var(--pink); color: white !important;
+    padding: 10px 22px; border-radius: 50px;
+    font-weight: 800 !important;
+    transition: transform 0.2s, background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--pink-dark) !important; transform: scale(1.05); }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    background: var(--lime);
+    display: flex; align-items: center;
+    padding: 100px 60px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-blobs {
+    position: absolute; inset: 0; pointer-events: none;
+    overflow: hidden;
+  }
+  .blob {
+    position: absolute; border-radius: 50%;
+    opacity: 0.25;
+  }
+  .blob-1 { width: 300px; height: 300px; background: var(--pink); top: -80px; right: 30%; }
+  .blob-2 { width: 200px; height: 200px; background: var(--yellow); bottom: 10%; left: 5%; }
+  .blob-3 { width: 150px; height: 150px; background: var(--orange); top: 20%; right: 5%; }
+
+  .hero-inner {
+    max-width: 1200px; margin: 0 auto; width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--pink); color: white;
+    border-radius: 50px; padding: 8px 18px;
+    font-size: 13px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 1px;
+    margin-bottom: 24px;
+    animation: bounceIn 0.8s ease;
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .hero h1 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.1;
+    color: var(--pink);
+    margin-bottom: 20px;
+    animation: slideUp 0.7s ease 0.1s both;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .hero p {
+    font-size: 18px; line-height: 1.7;
+    color: var(--dark); font-weight: 600;
+    margin-bottom: 36px;
+    animation: slideUp 0.7s ease 0.2s both;
+  }
+  .hero-actions {
+    display: flex; flex-direction: column; gap: 16px;
+    animation: slideUp 0.7s ease 0.3s both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--pink); color: white;
+    border: none; border-radius: 50px;
+    padding: 16px 36px; font-size: 18px; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 0 var(--pink-dark);
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 0 var(--pink-dark); }
+  .btn-primary:active { transform: translateY(1px); box-shadow: 0 2px 0 var(--pink-dark); }
+  .hero-sub-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--dark);
+    border: 2.5px solid var(--dark); border-radius: 50px;
+    padding: 12px 28px; font-size: 15px; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-outline:hover { background: var(--dark); color: white; transform: scale(1.03); }
+
+  .hero-image-wrap {
+    position: relative;
+    animation: slideUp 0.7s ease 0.25s both;
+  }
+  .hero-image-wrap img {
+    width: 100%; border-radius: 24px;
+    object-fit: cover; max-height: 480px;
+    border: 4px solid white;
+    box-shadow: 8px 8px 0 var(--pink);
+  }
+  .hero-float-badge {
+    position: absolute; bottom: -20px; left: -20px;
+    background: var(--yellow); border-radius: 16px;
+    padding: 14px 20px; border: 3px solid var(--dark);
+    box-shadow: 4px 4px 0 var(--dark);
+    font-weight: 800; font-size: 14px; color: var(--dark);
+    text-align: center;
+    animation: float 3s ease-in-out infinite;
+  }
+  .hero-float-badge span { display: block; font-size: 22px; font-family: 'Fredoka One', cursive; }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ===== TRUST BAR ===== */
+  .trust-bar {
+    background: var(--pink);
+    padding: 18px 40px;
+    display: flex; justify-content: center; align-items: center; gap: 48px;
+    flex-wrap: wrap;
+  }
+  .trust-item {
+    display: flex; align-items: center; gap: 10px;
+    color: white; font-weight: 700; font-size: 15px;
+  }
+  .trust-icon {
+    width: 32px; height: 32px; background: rgba(255,255,255,0.2);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+
+  /* ===== SECTION SHARED ===== */
+  section { padding: 90px 40px; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    display: inline-block;
+    background: var(--lime); color: var(--dark);
+    border-radius: 50px; padding: 6px 18px;
+    font-size: 12px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.15; color: var(--pink);
+    margin-bottom: 16px;
+  }
+  .section-subtitle {
+    font-size: 18px; color: var(--text-muted);
+    font-weight: 600; line-height: 1.6;
+    max-width: 580px;
+  }
+
+  /* ===== WHY OUTKID ===== */
+  .why { background: #FFF8FE; }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; margin-top: 56px;
+  }
+  .why-card {
+    background: white; border-radius: var(--radius);
+    padding: 32px 28px;
+    border: 2.5px solid transparent;
+    transition: border-color 0.3s, transform 0.3s;
+    cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .why-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 5px;
+  }
+  .why-card:nth-child(1)::before { background: var(--pink); }
+  .why-card:nth-child(2)::before { background: var(--lime); }
+  .why-card:nth-child(3)::before { background: var(--yellow); }
+  .why-card:hover { border-color: var(--pink); transform: translateY(-6px); }
+  .why-card-icon {
+    font-size: 28px; font-weight: 900; margin-bottom: 18px;
+    width: 68px; height: 68px;
+    background: var(--lime); border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--dark);
+  }
+  .why-card h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 22px; color: var(--pink);
+    margin-bottom: 10px;
+  }
+  .why-card p { font-size: 15px; line-height: 1.7; color: var(--text-muted); font-weight: 600; }
+
+  /* ===== HOW IT WORKS ===== */
+  .how { background: var(--lime); }
+  .how-steps {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 24px; margin-top: 56px;
+    position: relative;
+  }
+  .how-steps::before {
+    content: '';
+    position: absolute;
+    top: 36px; left: 10%; right: 10%; height: 3px;
+    background: repeating-linear-gradient(90deg, var(--pink) 0, var(--pink) 12px, transparent 12px, transparent 24px);
+    z-index: 0;
+  }
+  .how-step {
+    text-align: center; position: relative; z-index: 1;
+    background: white; border-radius: var(--radius);
+    padding: 32px 20px;
+    border: 3px solid white;
+    transition: transform 0.3s, border-color 0.3s;
+    box-shadow: 4px 4px 0 var(--pink);
+  }
+  .how-step:hover { transform: translateY(-6px); border-color: var(--pink); }
+  .step-num {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--pink); color: white;
+    font-family: 'Fredoka One', cursive; font-size: 24px;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px;
+    box-shadow: 3px 3px 0 var(--pink-dark);
+  }
+  .how-step h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 19px; color: var(--dark); margin-bottom: 8px;
+  }
+  .how-step p { font-size: 14px; color: var(--text-muted); font-weight: 600; line-height: 1.6; }
+
+  /* ===== OFFERS ===== */
+  .offers { background: white; }
+  .offers-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 28px; margin-top: 56px;
+  }
+  .offer-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 2.5px solid #F0E0EC;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .offer-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(240,45,138,0.15); }
+  .offer-card-img {
+    width: 100%; height: 200px; object-fit: cover;
+    display: block;
+  }
+  .offer-card-img-placeholder {
+    width: 100%; height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 900; font-family: 'Fredoka One', cursive;
+    letter-spacing: 1px;
+  }
+  .offer-card-body { padding: 24px; }
+  .offer-card-body h3 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 20px; color: var(--pink); margin-bottom: 10px;
+  }
+  .offer-card-body p { font-size: 14px; line-height: 1.7; color: var(--text-muted); font-weight: 600; }
+
+  /* ===== TESTIMONIALS ===== */
+  .testimonials { background: var(--dark); }
+  .testimonials .section-title { color: var(--lime); }
+  .testimonials .section-label { background: var(--pink); color: white; }
+  .testimonials .section-subtitle { color: rgba(255,255,255,0.6); }
+  .testimonials-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; margin-top: 56px;
+  }
+  .testimonial-card {
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius);
+    padding: 28px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .testimonial-card:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+  .quote-mark {
+    font-family: 'Fredoka One', cursive;
+    font-size: 56px; color: var(--pink);
+    line-height: 1; margin-bottom: 8px;
+  }
+  .testimonial-text {
+    font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.8);
+    font-weight: 600; margin-bottom: 20px;
+  }
+  .testimonial-author {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .author-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    object-fit: cover; border: 2px solid var(--pink);
+  }
+  .author-avatar-placeholder {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--pink); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fredoka One', cursive; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-weight: 800; font-size: 14px; color: white;
+  }
+  .author-role {
+    font-size: 12px; color: rgba(255,255,255,0.5); font-weight: 600;
+  }
+
+  /* ===== FAQs ===== */
+  .faq { background: var(--pink-light); }
+  .faq-list {
+    margin-top: 56px; display: flex; flex-direction: column; gap: 16px;
+    max-width: 760px;
+  }
+  .faq-item {
+    background: white; border-radius: var(--radius-sm);
+    border: 2px solid #F0D8E8;
+    overflow: hidden;
+  }
+  .faq-question {
+    width: 100%; text-align: left; padding: 20px 24px;
+    font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800;
+    color: var(--dark); cursor: pointer;
+    background: none; border: none;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 16px;
+  }
+  .faq-question:hover { color: var(--pink); }
+  .faq-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--lime); color: var(--dark);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 900; flex-shrink: 0;
+    transition: transform 0.3s, background 0.3s;
+  }
+  .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--pink); color: white; }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.3s;
+    padding: 0 24px;
+  }
+  .faq-item.open .faq-answer { max-height: 200px; padding-bottom: 20px; }
+  .faq-answer p { font-size: 15px; line-height: 1.7; color: var(--text-muted); font-weight: 600; }
+
+  /* ===== CTA ===== */
+  .cta-section {
+    background: var(--pink);
+    padding: 90px 40px;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before, .cta-section::after {
+    content: '';
+    position: absolute; border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .cta-section::before { width: 400px; height: 400px; top: -200px; right: -100px; }
+  .cta-section::after { width: 300px; height: 300px; bottom: -150px; left: -80px; }
+  .cta-section h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: clamp(32px, 4vw, 52px);
+    color: white; line-height: 1.2; margin-bottom: 16px;
+    position: relative; z-index: 1;
+  }
+  .cta-section p {
+    font-size: 18px; color: rgba(255,255,255,0.85); font-weight: 600;
+    margin-bottom: 40px; position: relative; z-index: 1;
+  }
+  .cta-btns {
+    display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+    position: relative; z-index: 1;
+  }
+  .btn-white {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--pink);
+    border: none; border-radius: 50px;
+    padding: 16px 36px; font-size: 17px; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-white:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.2); }
+  .btn-outline-white {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: white;
+    border: 2.5px solid rgba(255,255,255,0.6); border-radius: 50px;
+    padding: 14px 34px; font-size: 17px; font-weight: 800;
+    cursor: pointer; text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+    font-family: 'Nunito', sans-serif;
+  }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.15); border-color: white; }
+  .btn-label {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--lime); color: var(--dark);
+    border-radius: 50px; padding: 14px 32px;
+    font-size: 17px; font-weight: 800;
+    cursor: default; user-select: none;
+    font-family: 'Nunito', sans-serif;
+    border: 2.5px solid var(--dark);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.6);
+    padding: 48px 40px 32px;
+    text-align: center;
+  }
+  .footer-logo {
+    font-family: 'Fredoka One', cursive;
+    font-size: 32px; color: var(--lime);
+    margin-bottom: 12px; display: block;
+  }
+  .footer-tagline { font-size: 14px; font-weight: 600; margin-bottom: 32px; }
+  .footer-links {
+    display: flex; justify-content: center; gap: 32px; flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+  .footer-links a {
+    color: rgba(255,255,255,0.5); text-decoration: none; font-size: 14px; font-weight: 700;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--lime); }
+  .footer-copy { font-size: 13px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 900px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .hero { padding: 90px 24px 60px; }
+    .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+    .hero-image-wrap { display: none; }
+    section { padding: 70px 24px; }
+    .why-grid, .offers-grid, .testimonials-grid, .how-steps { grid-template-columns: 1fr; }
+    .how-steps::before { display: none; }
+    .trust-bar { gap: 24px; padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🧒</div>
+    <span class="nav-logo-text">OUTKID</span>
+  </a>
+  <div class="nav-links">
+    <a href="#why">Why Outkid</a>
+    <a href="#how">How It Works</a>
+    <a href="#offers">What We Offer</a>
+    <a href="#faq">FAQs</a>
+    <a href="#waitlist" class="nav-cta">Join Waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-blobs">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">Now accepting early signups</div>
+      <h1>The Smarter Way to Discover After-School Activities for Your Child</h1>
+      <p>Outkid helps busy parents find trusted after-school programs, learning hubs, and skill-building activities — matched to your child's age, interests, and your schedule.</p>
+      <div class="hero-actions">
+        <div class="btn-label">Join the Waitlist — It's Free</div>
+        <div class="hero-sub-btns">
+          <a href="https://app.formbricks.com/s/cmiqggt476r1bad01i9ww7v8a" target="_blank" class="btn-outline">I'm a Parent</a>
+          <a href="https://app.formbricks.com/s/cmiqh82u9cg63ad01tlsrokui" target="_blank" class="btn-outline">I'm an Activity Provider</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image-wrap">
+      <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=700&q=80" alt="Kids doing after-school activities">
+      <div class="hero-float-badge">
+        <span>500+</span>
+        Parents on waitlist!
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">
+    <div class="trust-icon">✓</div>
+    Verified Providers Only
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">◎</div>
+    Matched to Your Child
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">○</div>
+    Free to Join the Waitlist
+  </div>
+  <div class="trust-item">
+    <div class="trust-icon">★</div>
+    Trusted by Parents
+  </div>
+</div>
+
+<!-- WHY OUTKID -->
+<section class="why" id="why">
+  <div class="section-inner">
+    <div class="section-label">Why Outkid?</div>
+    <h2 class="section-title">Because parents shouldn't have to choose between safety, convenience, and quality</h2>
+    <p class="section-subtitle">Outkid curates verified after-school options so your child can thrive while you stay worry-free.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-card-icon">✦</div>
+        <h3>Curated Activity Options</h3>
+        <p>A wide variety of trusted after-school activities — academic, creative, physical, and skill-building — all in one place.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">✓</div>
+        <h3>Verified & Safe Providers</h3>
+        <p>Every provider is checked for safety standards, staff quality, and reliable facilities before joining our platform.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-card-icon">◷</div>
+        <h3>Parent-Friendly Convenience</h3>
+        <p>Filter by location, schedule, age group, and interests. Find the perfect fit in minutes, not hours.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="section-inner">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">Find the perfect activity in 4 easy steps</h2>
+    <p class="section-subtitle">Outkid makes the whole process simple, fast, and stress-free.</p>
+    <div class="how-steps">
+      <div class="how-step">
+        <div class="step-num">1</div>
+        <h3>Tell Us About Your Child</h3>
+        <p>Share your child's age, interests, and what kind of activities excite them.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">2</div>
+        <h3>Browse Matches</h3>
+        <p>We surface verified programs that match your child's profile and your schedule.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">3</div>
+        <h3>Review & Compare</h3>
+        <p>Read provider details, safety ratings, and reviews from other parents near you.</p>
+      </div>
+      <div class="how-step">
+        <div class="step-num">4</div>
+        <h3>Enroll with Confidence</h3>
+        <p>Connect with the provider and get your child started on something amazing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT WE OFFER -->
+<section class="offers" id="offers">
+  <div class="section-inner">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Activities for every interest & talent</h2>
+    <p class="section-subtitle">From homework help to sports leagues — if your child loves it, Outkid finds it.</p>
+    <div class="offers-grid">
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=600&q=80" alt="Kids doing arts and crafts">
+        <div class="offer-card-body">
+          <h3>Arts & Crafts</h3>
+          <p>Painting, drawing, pottery, and creative workshops led by skilled instructors in safe, fun environments.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=600&q=80" alt="Kids in STEM coding club">
+        <div class="offer-card-body">
+          <h3>STEM Clubs</h3>
+          <p>Coding, robotics, science experiments, and tech clubs that build real-world skills children love.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1551958219-acbc595f4cf0?w=600&q=80" alt="Kids playing football outdoors">
+        <div class="offer-card-body">
+          <h3>Sports & Fitness</h3>
+          <p>Football, swimming, dance, martial arts, and more — for kids to stay active and build teamwork.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600&q=80" alt="Child learning music">
+        <div class="offer-card-body">
+          <h3>Music & Performing Arts</h3>
+          <p>Piano, guitar, drama, choir, and expression-focused programs for young performers.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&q=80" alt="Child studying with books">
+        <div class="offer-card-body">
+          <h3>Academic Support</h3>
+          <p>Homework clubs, tutoring, and learning hubs to help children thrive in school.</p>
+        </div>
+      </div>
+      <div class="offer-card">
+        <img class="offer-card-img" src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?w=600&q=80" alt="Language learning class">
+        <div class="offer-card-body">
+          <h3>Language Classes</h3>
+          <p>French, Mandarin, Spanish, and more — taught in small groups by qualified language instructors.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="reviews">
+  <div class="section-inner">
+    <div class="section-label">Early Reviews</div>
+    <h2 class="section-title">Parents are already excited</h2>
+    <p class="section-subtitle">Here's what early community members are saying about Outkid.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">As a working parent, finding trustworthy after-school options is stressful. If Outkid gives me safe, flexible choices, I'm in.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">S</div>
+          <div>
+            <div class="author-name">Sarah O.</div>
+            <div class="author-role">Parent</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">This is exactly what parents like me need. I want safe, quality activities without spending hours searching across different platforms.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">A</div>
+          <div>
+            <div class="author-name">Amaka E.</div>
+            <div class="author-role">Parent</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">My son loves tech and sports, but finding the right programs has always been time-consuming. Outkid sounds like a real relief!</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">D</div>
+          <div>
+            <div class="author-name">Daniel O.</div>
+            <div class="author-role">Parent</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">If Outkid helps me find reliable options quickly, I'm definitely joining. The convenience factor alone is huge for busy families.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">N</div>
+          <div>
+            <div class="author-name">Ngozi A.</div>
+            <div class="author-role">Parent</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">The verification process gives me peace of mind. I don't have time to vet every provider myself — this solves a real problem.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">T</div>
+          <div>
+            <div class="author-name">Taiwo B.</div>
+            <div class="author-role">Parent</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p class="testimonial-text">I run a small art studio and I love that Outkid wants to connect quality providers with parents who actually need us.</p>
+        <div class="testimonial-author">
+          <div class="author-avatar-placeholder">F</div>
+          <div>
+            <div class="author-name">Funke M.</div>
+            <div class="author-role">Activity Provider</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQs -->
+<section class="faq" id="faq">
+  <div class="section-inner">
+    <div class="section-label">FAQs</div>
+    <h2 class="section-title">Got questions? We've got answers.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is Outkid an after-school centre?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <p>Not directly. Outkid connects parents with verified after-school activity providers that meet high standards for safety, quality, and convenience. Think of us as the trusted bridge between you and the best programs in your area.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          What types of activities will be available?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <p>A wide range — academic support, STEM clubs, arts & crafts, sports, music, language classes, skill-building workshops, and more. We're constantly growing our network of verified providers.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          How does Outkid ensure safety?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <p>We only partner with vetted, trusted providers with proper facilities, trained staff, and clear safety protocols. Every provider goes through our verification process before appearing on the platform.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Is Outkid free to use?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <p>Joining the waitlist is completely free. Full details on pricing and access will be shared with early users when we launch. Early members will get exclusive benefits!</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          Can I sign up as an activity provider?
+          <div class="faq-icon">+</div>
+        </button>
+        <div class="faq-answer">
+          <p>Yes! We welcome activity providers who want to reach more families. Click "I'm an Activity Provider" on the waitlist form and we'll be in touch with details on how to get listed.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / WAITLIST -->
+<section class="cta-section" id="waitlist">
+  <h2>Be the first to know when Outkid launches in your area</h2>
+  <p>Join hundreds of parents and activity providers already on the waitlist.</p>
+  <div class="cta-btns">
+    <a href="https://app.formbricks.com/s/cmiqggt476r1bad01i9ww7v8a" target="_blank" class="btn-white">I'm a Parent — Sign Me Up</a>
+    <a href="https://app.formbricks.com/s/cmiqh82u9cg63ad01tlsrokui" target="_blank" class="btn-outline-white">I'm an Activity Provider</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">OUTKID</span>
+  <p class="footer-tagline">The smarter way to discover safe, enriching after-school activities.</p>
+  <div class="footer-links">
+    <a href="#why">Why Outkid</a>
+    <a href="#how">How It Works</a>
+    <a href="#offers">Activities</a>
+    <a href="#faq">FAQs</a>
+    <a href="#waitlist">Join Waitlist</a>
+  </div>
+  <p class="footer-copy">© 2026 Outkid. All rights reserved. Made with love for families everywhere.</p>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Scroll-reveal animation
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.why-card, .how-step, .offer-card, .testimonial-card, .faq-item').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(24px)';
+  el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  observer.observe(el);
+});
+</script>
+
+</body>
+</html>
